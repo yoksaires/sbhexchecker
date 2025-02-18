@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Анализатор цветов брони Hypixel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 8px;
+            width: 200px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Анализатор цветов брони Hypixel</h1>
+    <div class="input-group">
+        <input type="text" id="colorInput" placeholder="Введите HEX-код (например, #FF5733)">
+        <button onclick="findClosestColor()">Найти</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        // Данные из CSV (предварительно обработаны)
+        const armorData = [
+            {"name":"Shadow Assassin Boots","color":"#000000"},
+			{"name":"Wither Chestplate","color":"#000000"},
+			{"name":"Bat Person Boots","color":"#000000"},
+			{"name":"Bat Person Chestplate","color":"#000000"},
+			{"name":"Bat Person Leggings","color":"#000000"},
+			{"name":"Watcher Chestplate","color":"#000000"},
+			{"name":"Wither Boots","color":"#000000"},
+			{"name":"Shadow Assassin Leggings","color":"#000000"},
+			{"name":"Shadow Assassin Leggings","color":"#000000"},
+			{"name":"Shadow Assassin Boots","color":"#000000"},
+			{"name":"Necromancer Lord Chestplate","color":"#000000"},
+			{"name":"Shadow Assassin Chestplate","color":"#000000"},
+			{"name":"Obsidian Chestplate","color":"#000000"},
+			{"name":"Rancher's Boots","color":"#000000"},
+			{"name":"Wither Leggings","color":"#000000"},
+			{"name":"Watcher Boots","color":"#000000"},
+			{"name":"Squid Boots","color":"#000000"},
+			{"name":"Watcher Leggings","color":"#000000"},
+			{"name":"Shadow Assassin Chestplate","color":"#000000"},
+			{"name":"Tarantula Chestplate","color":"#000000"},
+			{"name":"Tarantula Boots","color":"#000000"},
+			{"name":"Tarantula Helmet","color":"#000000"},
+			{"name":"Tarantula Leggings","color":"#000000"},
+			{"name":"Lapis Armor Chestplate","color":"#0000ff"},
+			{"name":"Lapis Armor Boots","color":"#0000ff"},
+			{"name":"Lapis Armor Leggings","color":"#0000ff"},
+			{"name":"Shark Scale Boots","color":"#002ca6"},
+			{"name":"Shark Scale Leggings","color":"#002ca6"},
+			{"name":"Shark Scale Chestplate","color":"#002ca6"},
+			{"name":"Helmet of Growth","color":"#00be00"},
+			{"name":"Chestplate of Growth","color":"#00be00"},
+			{"name":"Leggings of Growth","color":"#00be00"},
+			{"name":"Boots of Growth","color":"#00be00"},
+			{"name":"Party Top Hat","color":"#00ff00"},
+			{"name":"Cactus Chestplate","color":"#00ff00"},
+			{"name":"Cactus Boots","color":"#00ff00"},
+			{"name":"Emerald Armor Chestplate","color":"#00ff00"},
+			{"name":"Cactus Helmet","color":"#00ff00"},{"name":"Emerald Armor Helmet","color":"#00ff00"},{"name":"Cactus Leggings","color":"#00ff00"},{"name":"Emerald Armor Leggings","color":"#00ff00"},{"name":"Emerald Armor Boots","color":"#00ff00"},{"name":"Rotten Leggings","color":"#017d31"},{"name":"Rotten Chestplate","color":"#017d31"},{"name":"Squash Chestplate","color":"#03430e"},{"name":"Glacite Chestplate","color":"#03fcf8"},{"name":"Glacite Leggings","color":"#03fcf8"},{"name":"Glacite Boots","color":"#03fcf8"},{"name":"Stereo Pants","color":"#04cfd3"},{"name":"Shimmering Light Slippers","color":"#07031b"},{"name":"Shimmering Light Trousers","color":"#07031b"},{"name":"Shimmering Light Tunic","color":"#07031b"},{"name":"Infernal Fervor Boots","color":"#07a674"},{"name":"Fervor Boots","color":"#07a674"},{"name":"Burning Fervor Boots","color":"#07a674"},{"name":"Hot Fervor Boots","color":"#07a674"},{"name":"Fiery Fervor Boots","color":"#07a674"},{"name":"Final Destination Chestplate","color":"#0a0011"},{"name":"Final Destination Boots","color":"#0a0011"},{"name":"Angler Leggings","color":"#0b004f"},{"name":"Angler Boots","color":"#0b004f"},{"name":"Angler Chestplate","color":"#0b004f"},{"name":"Burned Pants","color":"#0c0c96"},{"name":"Squash Leggings","color":"#0c4a16"},{"name":"Water Hydra Boots","color":"#101555"},{"name":"Water Hydra Chestplate","color":"#101555"},{"name":"Water Hydra Leggings","color":"#101555"},{"name":"Sea Walker Chestplate","color":"#10616e"},{"name":"Sea Walker Boots","color":"#10616e"},{"name":"Sea Walker Leggings","color":"#10616e"},{"name":"Guardian Chestplate","color":"#117391"},{"name":"Squash Boots","color":"#13561e"},{"name":"Wyld Boots","color":"#154918"},{"name":"Storm's Chestplate","color":"#1793c4"},{"name":"Storm's Leggings","color":"#17a8c4"},{"name":"Infernal Fervor Leggings","color":"#17bf89"},{"name":"Fervor Leggings","color":"#17bf89"},{"name":"Burning Fervor Leggings","color":"#17bf89"},{"name":"Hot Fervor Leggings","color":"#17bf89"},{"name":"Fiery Fervor Leggings","color":"#17bf89"},{"name":"Elegant Tuxedo Jacket","color":"#191919"},{"name":"Elegant Tuxedo Oxfords","color":"#191919"},{"name":"Snake-in-a-Boot","color":"#1a004c"},{"name":"Reaper Boots","color":"#1b1b1b"},{"name":"Reaper Chestplate","color":"#1b1b1b"},{"name":"Reaper Leggings","color":"#1b1b1b"},{"name":"Storm's Boots","color":"#1cd4e4"},{"name":"Werewolf Chestplate","color":"#1d1105"},{"name":"Werewolf Boots","color":"#1d1105"},{"name":"Werewolf Leggings","color":"#1d1105"},{"name":"Thunder Chestplate","color":"#24dde5"},{"name":"Thunder Leggings","color":"#24dde5"},{"name":"Thunder Boots","color":"#24dde5"},{"name":"Skeleton Lord Chestplate","color":"#268105"},{"name":"Skeleton Lord Leggings","color":"#268105"},{"name":"Skeleton Lord Boots","color":"#268105"},{"name":"Slug Boots","color":"#276114"},{"name":"Infernal Aurora Chestplate","color":"#2841f1"},{"name":"Aurora Chestplate","color":"#2841f1"},{"name":"Burning Aurora Chestplate","color":"#2841f1"},{"name":"Hot Aurora Chestplate","color":"#2841f1"},{"name":"Fiery Aurora Chestplate","color":"#2841f1"},{"name":"Wise Dragon Boots","color":"#29f0e9"},{"name":"Wise Dragon Leggings","color":"#29f0e9"},{"name":"Wise Dragon Chestplate","color":"#29f0e9"},{"name":"Minos Hunter Boots","color":"#304b4e"},{"name":"Fancy Tuxedo Oxfords","color":"#332a2a"},{"name":"Fancy Tuxedo Jacket","color":"#332a2a"},{"name":"Ugly Boots","color":"#3333ff"},{"name":"Vanguard Chestplate","color":"#3588ff"},{"name":"Vanguard Leggings","color":"#3588ff"},{"name":"Vanguard Boots","color":"#3588ff"},{"name":"Wyld Leggings","color":"#35b73b"},{"name":"Necromancer Lord Leggings","color":"#370147"},{"name":"Goblin Chestplate","color":"#37b042"},{"name":"Goblin Leggings","color":"#37b042"},{"name":"Goblin Boots","color":"#37b042"},{"name":"Exceedingly Comfy Sneakers","color":"#380024"},{"name":"Cheap Tuxedo Jacket","color":"#383838"},{"name":"Cheap Tuxedo Oxfords","color":"#383838"},{"name":"Infernal Terror Chestplate","color":"#3e05af"},{"name":"Terror Chestplate","color":"#3e05af"},{"name":"Burning Terror Chestplate","color":"#3e05af"},{"name":"Hot Terror Chestplate","color":"#3e05af"},{"name":"Fiery Terror Chestplate","color":"#3e05af"},{"name":"Infernal Aurora Leggings","color":"#3f56fb"},{"name":"Aurora Leggings","color":"#3f56fb"},{"name":"Burning Aurora Leggings","color":"#3f56fb"},{"name":"Hot Aurora Leggings","color":"#3f56fb"},{"name":"Fiery Aurora Leggings","color":"#3f56fb"},{"name":"Necromancer Lord Boots","color":"#400352"},{"name":"Crypt Witherlord Helmet","color":"#450101"},{"name":"Crypt Witherlord Leggings","color":"#450101"},{"name":"Crypt Witherlord Boots","color":"#450101"},{"name":"Crypt Witherlord Chestplate","color":"#450101"},{"name":"Goldor's Chestplate","color":"#45413c"},{"name":"Nutcracker Boots","color":"#46343a"},{"name":"Holy Dragon Chestplate","color":"#47d147"},{"name":"Holy Dragon Leggings","color":"#47d147"},{"name":"Holy Dragon Boots","color":"#47d147"},{"name":"Femurgrowth Leggings","color":"#48ff00"},{"name":"Maxor's Chestplate","color":"#4a14b7"},{"name":"Leaflet Tunic","color":"#4dcc4d"},{"name":"Leaflet Sandals","color":"#4dcc4d"},{"name":"Leaflet Pants","color":"#4dcc4d"},{"name":"Gunther's Sneakers","color":"#4f2886"},{"name":"Squire Boots","color":"#545454"},{"name":"Fallen Star Chestplate","color":"#586158"},{"name":"Fallen Star Boots","color":"#586158"},{"name":"Fallen Star Leggings","color":"#586158"},{"name":"Fermento Chestplate","color":"#58890c"},{"name":"Super Heavy Chestplate","color":"#5a6464"},{"name":"Super Heavy Leggings","color":"#5a6464"},{"name":"Glossy Mineral Chestplate","color":"#5b0dae"},{"name":"Glossy Mineral Leggings","color":"#5b0dae"},{"name":"Glossy Mineral Boots","color":"#5b0dae"},{"name":"Infernal Terror Leggings","color":"#5d23d1"},{"name":"Terror Leggings","color":"#5d23d1"},{"name":"Burning Terror Leggings","color":"#5d23d1"},{"name":"Hot Terror Leggings","color":"#5d23d1"},{"name":"Fiery Terror Leggings","color":"#5d23d1"},{"name":"Maxor's Leggings","color":"#5d2fb9"},{"name":"Spooky Chestplate","color":"#606060"},{"name":"Spooky Boots","color":"#606060"},{"name":"Spooky Leggings","color":"#606060"},{"name":"Infernal Aurora Boots","color":"#6184fc"},{"name":"Aurora Boots","color":"#6184fc"},{"name":"Burning Aurora Boots","color":"#6184fc"},{"name":"Hot Aurora Boots","color":"#6184fc"},{"name":"Fiery Aurora Boots","color":"#6184fc"},{"name":"Goldor's Leggings","color":"#65605a"},{"name":"Fermento Leggings","color":"#6a9c1b"},{"name":"Magma Lord Boots","color":"#6f0f08"},{"name":"Magma Lord Chestplate","color":"#6f0f08"},{"name":"Magma Lord Leggings","color":"#6f0f08"},{"name":"Cropie Chestplate","color":"#7a2900"},{"name":"Prospecting Chestplate","color":"#7a7964"},{"name":"Prospecting Boots","color":"#7a7964"},{"name":"Prospecting Helmet","color":"#7a7964"},{"name":"Prospecting Leggings","color":"#7a7964"},{"name":"Creeper Pants","color":"#7ae82c"},{"name":"Infernal Terror Boots","color":"#7c44ec"},{"name":"Terror Boots","color":"#7c44ec"},{"name":"Burning Terror Boots","color":"#7c44ec"},{"name":"Hot Terror Boots","color":"#7c44ec"},{"name":"Fiery Terror Boots","color":"#7c44ec"},{"name":"Ghostly Boots","color":"#808080"},{"name":"Heavy Chestplate","color":"#828282"},{"name":"Heavy Leggings","color":"#828282"},{"name":"Fermento Boots","color":"#83b03b"},{"name":"Goldor's Boots","color":"#88837e"},{"name":"Maxor's Boots","color":"#8969c8"},{"name":"Melon Boots","color":"#899e20"},{"name":"Melon Chestplate","color":"#899e20"},{"name":"Melon Leggings","color":"#899e20"},{"name":"Arachne's Boots","color":"#8b0000"},{"name":"Arachne's Chestplate","color":"#8b0000"},{"name":"Arachne's Leggings","color":"#8b0000"},{"name":"Cropie Leggings","color":"#94451f"},{"name":"Emperor Leggings","color":"#990d00"},{"name":"Emperor Robes","color":"#990d00"},{"name":"Emperor Shoes","color":"#990d00"},{"name":"Great Spook Leggings","color":"#993399"},{"name":"Great Spook Chestplate","color":"#993399"},{"name":"Great Spook Boots","color":"#993399"},{"name":"Great Spook Helmet","color":"#993399"},{"name":"Protector Dragon Boots","color":"#99978b"},{"name":"Protector Dragon Chestplate","color":"#99978b"},{"name":"Protector Dragon Leggings","color":"#99978b"},{"name":"Zombie Lord Leggings","color":"#9b01c1"},{"name":"Zombie Lord Chestplate","color":"#9b01c1"},{"name":"Zombie Lord Boots","color":"#9b01c1"},{"name":"Rotten Helmet","color":"#9e7003"},{"name":"Rotten Boots","color":"#9e7003"},{"name":"Boots of the Rising Sun","color":"#9f8609"},{"name":"Boots of the Rising Sun","color":"#9f8609"},{"name":"Frozen Blaze Chestplate","color":"#a0daef"},{"name":"Frozen Blaze Leggings","color":"#a0daef"},{"name":"Frozen Blaze Boots","color":"#a0daef"},{"name":"Salmon Leggings","color":"#a82b76"},{"name":"Salmon Chestplate","color":"#a82b76"},{"name":"Salmon Chestplate","color":"#a82b76"},{"name":"Salmon Leggings","color":"#a82b76"},{"name":"Bouncy Chestplate","color":"#adff2f"},{"name":"Bouncy Leggings","color":"#adff2f"},{"name":"Bouncy Helmet","color":"#adff2f"},{"name":"Bouncy Boots","color":"#adff2f"},{"name":"Unstable Dragon Boots","color":"#b212e3"},{"name":"Unstable Dragon Chestplate","color":"#b212e3"},{"name":"Unstable Dragon Leggings","color":"#b212e3"},{"name":"Heat Helmet","color":"#b3b3b3"},{"name":"Heat Leggings","color":"#b3b3b3"},{"name":"Heat Boots","color":"#b3b3b3"},{"name":"Heat Chestplate","color":"#b3b3b3"},{"name":"Cropie Boots","color":"#bb6535"},{"name":"Adaptive Boots","color":"#bfbcb2"},{"name":"Adaptive Chestplate","color":"#bfbcb2"},{"name":"Adaptive Leggings","color":"#bfbcb2"},{"name":"Adaptive Chestplate","color":"#bfbcb2"},{"name":"Adaptive Leggings","color":"#bfbcb2"},{"name":"Adaptive Boots","color":"#bfbcb2"},{"name":"Spirit Boots","color":"#bfbfbf"},{"name":"Spirit Boots","color":"#bfbfbf"},{"name":"Salmon Helmet","color":"#c13c0f"},{"name":"Salmon Boots","color":"#c13c0f"},{"name":"Salmon Boots","color":"#c13c0f"},{"name":"Salmon Helmet","color":"#c13c0f"},{"name":"Cheap Tuxedo Pants","color":"#c7c7c7"},{"name":"Yog Chestplate","color":"#c83200"},{"name":"Yog Leggings","color":"#c83200"},{"name":"Yog Boots","color":"#c83200"},{"name":"Yog Helmet","color":"#c83200"},{"name":"Rabbit Chestplate","color":"#cbd2db"},{"name":"Rabbit Leggings","color":"#cbd2db"},{"name":"Rabbit Helmet","color":"#cbd2db"},{"name":"Rabbit Boots","color":"#cbd2db"},{"name":"Farmer Boots","color":"#cc5500"},{"name":"Mineral Boots","color":"#cce5ff"},{"name":"Mineral Chestplate","color":"#cce5ff"},{"name":"Mineral Leggings","color":"#cce5ff"},{"name":"Moogma Leggings","color":"#ce2c2c"},{"name":"Zombie Soldier Leggings","color":"#d07f00"},{"name":"Zombie Soldier Helmet","color":"#d07f00"},{"name":"Zombie Soldier Boots","color":"#d07f00"},{"name":"Zombie Soldier Chestplate","color":"#d07f00"},{"name":"Starlight Chestplate","color":"#d400ff"},{"name":"Starlight Boots","color":"#d400ff"},{"name":"Celeste Helmet","color":"#d48ef2"},{"name":"Fancy Tuxedo Pants","color":"#d4d4d4"},{"name":"Zombie Commander Chestplate","color":"#d51230"},{"name":"Zombie Commander Boots","color":"#d51230"},{"name":"Zombie Commander Leggings","color":"#d51230"},{"name":"Zombie Commander Helmet","color":"#d51230"},{"name":"Strong Dragon Chestplate","color":"#d91e41"},{"name":"Stone Chestplate","color":"#d9d9d9"},{"name":"Steel Chestplate","color":"#d9d9d9"},{"name":"Metal Chestplate","color":"#d9d9d9"},{"name":"Young Dragon Leggings","color":"#dde4f0"},{"name":"Young Dragon Chestplate","color":"#dde4f0"},{"name":"Young Dragon Boots","color":"#dde4f0"},{"name":"Leggings of the Rising Sun","color":"#debc15"},{"name":"Leggings of the Rising Sun","color":"#debc15"},{"name":"Rampart Chestplate","color":"#df2e06"},{"name":"Rampart Leggings","color":"#df2e06"},{"name":"Rampart Boots","color":"#df2e06"},{"name":"Strong Dragon Leggings","color":"#e09419"},{"name":"Speedster Leggings","color":"#e0fcf7"},{"name":"Speedster Boots","color":"#e0fcf7"},{"name":"Mercenary Boots","color":"#e0fcf7"},{"name":"Speedster Chestplate","color":"#e0fcf7"},{"name":"Speedster Helmet","color":"#e0fcf7"},{"name":"Skeleton Grunt Boots","color":"#e1eb34"},{"name":"Skeleton Grunt Chestplate","color":"#e1eb34"},{"name":"Skeleton Grunt Helmet","color":"#e1eb34"},{"name":"Skeleton Grunt Leggings","color":"#e1eb34"},{"name":"Infernal Hollow Boots","color":"#e3fffa"},{"name":"Hollow Boots","color":"#e3fffa"},{"name":"Burning Hollow Boots","color":"#e3fffa"},{"name":"Hot Hollow Boots","color":"#e3fffa"},{"name":"Fiery Hollow Boots","color":"#e3fffa"},{"name":"Infernal Crimson Boots","color":"#e65300"},{"name":"Crimson Boots","color":"#e65300"},{"name":"Burning Crimson Boots","color":"#e65300"},{"name":"Hot Crimson Boots","color":"#e65300"},{"name":"Fiery Crimson Boots","color":"#e65300"},{"name":"Infernal Crimson Leggings","color":"#e66105"},{"name":"Crimson Leggings","color":"#e66105"},{"name":"Burning Crimson Leggings","color":"#e66105"},{"name":"Hot Crimson Leggings","color":"#e66105"},{"name":"Fiery Crimson Leggings","color":"#e66105"},{"name":"Super Heavy Boots","color":"#e6e6e6"},{"name":"Super Heavy Helmet","color":"#e6e6e6"},{"name":"Necron's Chestplate","color":"#e7413c"},{"name":"Necron's Leggings","color":"#e75c3c"},{"name":"Necron's Boots","color":"#e76e3c"},{"name":"Flaming Chestplate","color":"#ed6612"},{"name":"Pumpkin Boots","color":"#edaa36"},{"name":"Pumpkin Chestplate","color":"#edaa36"},{"name":"Pumpkin Helmet","color":"#edaa36"},{"name":"Pumpkin Leggings","color":"#edaa36"},{"name":"Infernal Fervor Chestplate","color":"#f04729"},{"name":"Fervor Chestplate","color":"#f04729"},{"name":"Burning Fervor Chestplate","color":"#f04729"},{"name":"Hot Fervor Chestplate","color":"#f04729"},{"name":"Fiery Fervor Chestplate","color":"#f04729"},{"name":"Strong Dragon Boots","color":"#f0d124"},{"name":"Old Dragon Boots","color":"#f0e6aa"},{"name":"Old Dragon Chestplate","color":"#f0e6aa"},{"name":"Old Dragon Leggings","color":"#f0e6aa"},{"name":"Superior Dragon Boots","color":"#f25d18"},{"name":"Superior Dragon Chestplate","color":"#f2df11"},{"name":"Superior Dragon Leggings","color":"#f2df11"},{"name":"Blaze Boots","color":"#f7da33"},{"name":"Blaze Chestplate","color":"#f7da33"},{"name":"Blaze Leggings","color":"#f7da33"},{"name":"Nutcracker Chestplate","color":"#fc2f3c"},{"name":"Crystal Chestplate","color":"#fcf3ff"},{"name":"Crystal Helmet","color":"#fcf3ff"},{"name":"Crystal Boots","color":"#fcf3ff"},{"name":"Crystal Leggings","color":"#fcf3ff"},{"name":"Elegant Tuxedo Pants","color":"#fefdfc"},{"name":"Mushroom Chestplate","color":"#ff0000"},{"name":"Mushroom Boots","color":"#ff0000"},{"name":"Mushroom Helmet","color":"#ff0000"},{"name":"Mushroom Leggings","color":"#ff0000"},{"name":"Chestplate of the Pack","color":"#ff0000"},{"name":"Minos Hunter Chestplate","color":"#ff0a0a"},{"name":"Minos Hunter Leggings","color":"#ff0a0a"},{"name":"Fairy's Fedora","color":"#ff3399"},{"name":"Orange Chestplate","color":"#ff4600"},{"name":"Fairy's Polo","color":"#ff66b2"},{"name":"Skeleton Master Chestplate","color":"#ff6b0b"},{"name":"Skeleton Master Boots","color":"#ff6b0b"},{"name":"Skeleton Master Leggings","color":"#ff6b0b"},{"name":"Skeleton Master Helmet","color":"#ff6b0b"},{"name":"Infernal Crimson Chestplate","color":"#ff6f0c"},{"name":"Crimson Chestplate","color":"#ff6f0c"},{"name":"Burning Crimson Chestplate","color":"#ff6f0c"},{"name":"Hot Crimson Chestplate","color":"#ff6f0c"},{"name":"Fiery Crimson Chestplate","color":"#ff6f0c"},{"name":"Final Destination Leggings","color":"#ff75ff"},{"name":"Celeste Boots","color":"#ff8eb6"},{"name":"Celeste Leggings","color":"#ff8eca"},{"name":"Celeste Chestplate","color":"#ff8ede"},{"name":"Armor of Magma Boots","color":"#ff9300"},{"name":"Armor of Magma Helmet","color":"#ff9300"},{"name":"Armor of Magma Leggings","color":"#ff9300"},{"name":"Armor of Magma Chestplate","color":"#ff9300"},{"name":"Fairy's Trousers","color":"#ff99cc"},{"name":"Berserker Chestplate","color":"#ffa33b"},{"name":"Biohazard Leggings","color":"#ffac00"},{"name":"Biohazard Suit","color":"#ffac00"},{"name":"Biohazard Boots","color":"#ffac00"},{"name":"Berserker Leggings","color":"#ffb727"},{"name":"Skeleton Soldier Leggings","color":"#ffbc0b"},{"name":"Skeleton Soldier Helmet","color":"#ffbc0b"},{"name":"Skeleton Soldier Boots","color":"#ffbc0b"},{"name":"Skeleton Soldier Chestplate","color":"#ffbc0b"},{"name":"Infernal Hollow Chestplate","color":"#ffcb0d"},{"name":"Hollow Chestplate","color":"#ffcb0d"},{"name":"Burning Hollow Chestplate","color":"#ffcb0d"},{"name":"Hot Hollow Chestplate","color":"#ffcb0d"},{"name":"Fiery Hollow Chestplate","color":"#ffcb0d"},{"name":"Fairy's Galoshes","color":"#ffcce5"},{"name":"Berserker Boots","color":"#ffd427"},{"name":"Farm Armor Chestplate","color":"#ffd700"},{"name":"Farm Armor Boots","color":"#ffd700"},{"name":"Farm Armor Leggings","color":"#ffd700"},{"name":"Farm Armor Helmet","color":"#ffd700"},{"name":"W Logo","color":"#ffd700"},{"name":"Eleanor's Tunic","color":"#ffd700"},{"name":"Eleanor's Cap","color":"#ffd700"},{"name":"Eleanor's Trousers","color":"#ffd700"},{"name":"Eleanor's Slippers","color":"#ffd700"},{"name":"Spongy Shoes","color":"#ffdc51"},{"name":"Sponge Leggings","color":"#ffdc51"},{"name":"Sponge Chestplate","color":"#ffdc51"},{"name":"Chicken Leggs","color":"#fff200"},{"name":"Infernal Hollow Leggings","color":"#fff6a3"},{"name":"Hollow Leggings","color":"#fff6a3"},{"name":"Burning Hollow Leggings","color":"#fff6a3"},{"name":"Hot Hollow Leggings","color":"#fff6a3"},{"name":"Fiery Hollow Leggings","color":"#fff6a3"},{"name":"Nutcracker Leggings","color":"#fff9eb"},{"name":"Farm Suit Boots","color":"#ffff00"},{"name":"Farm Suit Helmet","color":"#ffff00"},{"name":"Farm Suit Chestplate","color":"#ffff00"},{"name":"Farm Suit Leggings","color":"#ffff00"},{"name":"Heavy Helmet","color":"#ffffff"},{"name":"Heavy Boots","color":"#ffffff"},{"name":"Helmet of the Pack","color":"#ffffff"},{"name":"Snow Suit Chestplate","color":"#ffffff"},
+			{"name":"Snow Suit Leggings","color":"#ffffff"},
+			{"name":"Snow Suit Boots","color":"#ffffff"}
+            // ... (все остальные записи из CSV)
+        ];
+
+        // Преобразование HEX в RGB
+        function hexToRgb(hex) {
+            hex = hex.replace(/^#/, '');
+            let r = parseInt(hex.substring(0, 2), 16);
+            let g = parseInt(hex.substring(2, 4), 16);
+            let b = parseInt(hex.substring(4, 6), 16);
+            return [r, g, b];
+        }
+
+        // Вычисление евклидова расстояния
+        function colorDistance(color1, color2) {
+            const [r1, g1, b1] = hexToRgb(color1);
+            const [r2, g2, b2] = hexToRgb(color2);
+            return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
+        }
+
+        // Определение тира
+        function getTier(difference) {
+            if (difference <= 10) return "S";
+            if (difference <= 20) return "A";
+            if (difference <= 30) return "B";
+            if (difference <= 40) return "C";
+            if (difference <= 50) return "D";
+            return "F";
+        }
+
+        function findClosestColor() {
+            const inputColor = document.getElementById('colorInput').value.toUpperCase();
+            if (!/^#([A-Fa-f0-9]{6})$/.test(inputColor)) {
+                alert("Некорректный HEX-код!");
+                return;
+            }
+
+            let closest = { name: "", color: "", difference: Infinity };
+            for (const item of armorData) {
+                if (!item.color) continue;
+                const diff = colorDistance(inputColor, item.color);
+                if (diff < closest.difference) {
+                    closest = {
+                        name: item.name,
+                        color: item.color,
+                        difference: diff,
+                        tier: getTier(diff)
+                    };
+                }
+            }
+
+            // Форматирование вывода
+            const resultHTML = `
+                <h3>Результаты для: ${inputColor}</h3>
+                <table>
+                    <tr><th>Броня</th><th>Цвет</th><th>Разница</th><th>Тир</th></tr>
+                    <tr>
+                        <td>${closest.name}</td>
+                        <td style="background-color:${closest.color}">${closest.color}</td>
+                        <td>${Math.round(closest.difference)}</td>
+                        <td>${closest.tier}</td>
+                    </tr>
+                </table>
+            `;
+            document.getElementById('result').innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>
