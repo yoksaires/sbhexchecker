@@ -415,7 +415,46 @@ const armorData = [
 			{"name":"Snow Suit Chestplate","color":"#ffffff"},
 			{"name":"Snow Suit Leggings","color":"#ffffff"},
 			{"name":"Snow Suit Boots","color":"#ffffff"},
-			{"name":"Aquamarine Dye","color":"#7FFFD4"},{"name":"Archfiend Dye","color":"#B80036"},{"name":"Bingo Blue Dye","color":"#002FA7"},{"name":"Bone Dye","color":"#E3DAC9"},{"name":"Brick Red Dye","color":"#CB4154"},{"name":"Byzantium Dye","color":"#702963"},{"name":"Carmine Dye","color":"#960018"},{"name":"Celadon Dye","color":"#ACE1AF"},{"name":"Celeste Dye","color":"#B2FFFF"},{"name":"Chocolate Dye","color":"#7B3F00"},{"name":"Copper Dye","color":"#B87333"},{"name":"Cyclamen Dye","color":"#F56FA1"},{"name":"Dark Purple Dye","color":"#301934"},{"name":"Dung Dye","color":"#4F2A2A"},{"name":"Emerald Dye","color":"#50C878"},{"name":"Flame Dye","color":"#E25822"},{"name":"Fossil Dye","color":"#866F12"},{"name":"Frostbitten Dye","color":"#09D8EB"},{"name":"Holly Dye","color":"#3C6746"},{"name":"Iceberg Dye","color":"#71A6D2"},{"name":"Jade Dye","color":"#00A86B"},{"name":"Livid Dye","color":"#CEB7AA"},{"name":"Mango Dye","color":"#FDBE02"},{"name":"Matcha Dye","color":"#74A12E"},{"name":"Midnight Dye","color":"#50216C"},{"name":"Mocha Dye","color":"#967969"},{"name":"Nadeshiko Dye","color":"#F6ADC6"},{"name":"Necron Dye","color":"#E7413C"},{"name":"Nyanza Dye","color":"#E9FFDB"},{"name":"Pearlescent Dye","color":"#115555"},{"name":"Pelt Dye","color":"#50414C"},{"name":"Periwinkle Dye","color":"#CCCCFF"},{"name":"Pure Black Dye","color":"#000000"},{"name":"Pure Blue Dye","color":"#0013FF"},{"name":"Pure White Dye","color":"#FFFFFF"},{"name":"Pure Yellow Dye","color":"#FFF700"},{"name":"Sangria Dye","color":"#D40808"},{"name":"Secret Dye","color":"#7D7D7D"},{"name":"Wild Strawberry Dye","color":"#FF43A4"},{"name":"Tentacle Dye","color":"#324D6C"}
+			{"name":"Aquamarine Dye","color":"#7FFFD4"},
+			{"name":"Archfiend Dye","color":"#B80036"},
+			{"name":"Bingo Blue Dye","color":"#002FA7"},
+			{"name":"Bone Dye","color":"#E3DAC9"},
+			{"name":"Brick Red Dye","color":"#CB4154"},
+			{"name":"Byzantium Dye","color":"#702963"},
+			{"name":"Carmine Dye","color":"#960018"},
+			{"name":"Celadon Dye","color":"#ACE1AF"},
+			{"name":"Celeste Dye","color":"#B2FFFF"},
+			{"name":"Chocolate Dye","color":"#7B3F00"},
+			{"name":"Copper Dye","color":"#B87333"},
+			{"name":"Cyclamen Dye","color":"#F56FA1"},
+			{"name":"Dark Purple Dye","color":"#301934"},
+			{"name":"Dung Dye","color":"#4F2A2A"},
+			{"name":"Emerald Dye","color":"#50C878"},
+			{"name":"Flame Dye","color":"#E25822"},
+			{"name":"Fossil Dye","color":"#866F12"},
+			{"name":"Frostbitten Dye","color":"#09D8EB"},
+			{"name":"Holly Dye","color":"#3C6746"},
+			{"name":"Iceberg Dye","color":"#71A6D2"},
+			{"name":"Jade Dye","color":"#00A86B"},
+			{"name":"Livid Dye","color":"#CEB7AA"},
+			{"name":"Mango Dye","color":"#FDBE02"},
+			{"name":"Matcha Dye","color":"#74A12E"},
+			{"name":"Midnight Dye","color":"#50216C"},
+			{"name":"Mocha Dye","color":"#967969"},
+			{"name":"Nadeshiko Dye","color":"#F6ADC6"},
+			{"name":"Necron Dye","color":"#E7413C"},
+			{"name":"Nyanza Dye","color":"#E9FFDB"},
+			{"name":"Pearlescent Dye","color":"#115555"},
+			{"name":"Pelt Dye","color":"#50414C"},
+			{"name":"Periwinkle Dye","color":"#CCCCFF"},
+			{"name":"Pure Black Dye","color":"#000000"},
+			{"name":"Pure Blue Dye","color":"#0013FF"},
+			{"name":"Pure White Dye","color":"#FFFFFF"},
+			{"name":"Pure Yellow Dye","color":"#FFF700"},
+			{"name":"Sangria Dye","color":"#D40808"},
+			{"name":"Secret Dye","color":"#7D7D7D"},
+			{"name":"Wild Strawberry Dye","color":"#FF43A4"},
+			{"name":"Tentacle Dye","color":"#324D6C"}
             
 ];
 
@@ -571,18 +610,16 @@ function getDistance(rgb1, rgb2) {
 }
 
 function getRank(distance) {
-    if (distance < 20) {
-        return 'S';
-    } else if (distance < 40) {
-        return 'A';
-    } else if (distance < 60) {
-        return 'B';
-    } else if (distance < 80) {
-        return 'C';
-    } else if (distance < 100) {
-        return 'D';
+    if (distance === 0) {
+        return 'T0';
+    } else if (distance < 1.999) {
+        return 'T1';
+    } else if (distance < 4.999) {
+        return 'T2';
+    } else if (distance < 9.999) {
+        return 'T3';
     } else {
-        return 'F';
+        return 'T4';
     }
 }
 
