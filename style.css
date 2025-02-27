@@ -58,7 +58,6 @@ button:hover {
 .history-tag:hover {
     background-color: #0056b3;
 }
-
 table {
     width: 100%;
     margin-top: 20px;
@@ -68,6 +67,8 @@ table {
 th, td {
     padding: 10px;
     text-align: left;
+    white-space: pre-line; /* Важное свойство для обработки \n */
+    word-break: break-word; /* Дополнительно: разбиение длинных слов */
 }
 
 td.color-cell {
