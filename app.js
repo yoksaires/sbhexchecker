@@ -98,7 +98,7 @@ const armorData = [
 {"name":"Burning Terror / Fiery Terror / Hot Terror / Infernal Terror / Terror Boots","color":"#7c44ec"},
 {"name":"Secret Dye","color":"#7D7D7D"},
 {"name":"CRYSTAL Purple","color":"#7E4196"},
-{"name":"OG FAIRY Purple","color":"#7F0OFF"},
+{"name":"OG FAIRY Purple","color":"#7F00FF"},
 {"name":"Aquamarine Dye","color":"#7FFFD4"},
 {"name":"Ghostly Boots","color":"#808080"},
 {"name":"Heavy Chestplate & Leggings","color":"#828282"},
@@ -230,7 +230,7 @@ const armorData = [
 {"name":"Nutcracker Leggings","color":"#fff9eb"},
 {"name":"Farm Suit Helmet & Chestplate & Leggings & Boots","color":"#ffff00"},
 {"name":"Heavy Helmet & Boots \nHelmet of the Pack \nPure White Dye \nSnow Suit Chestplate & Leggings & Boots","color":"#ffffff"},
-{"name":"OG FAIRY Magenta","color":"#FFOOFF"}
+{"name":"OG FAIRY Magenta","color":"#FF00FF"}
 ];
 
 function rgbToXyz(rgb) {
