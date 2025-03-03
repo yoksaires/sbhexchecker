@@ -304,7 +304,14 @@ const translations = {
         differenceHeader: 'Разница',
         tierHeader: 'Ранг',
         invalidHex: 'Неверный формат HEX кода',
-        enteredColor: 'Введённый цвет:'
+        enteredColor: 'Введённый цвет:',
+        themes: {
+            light: 'Светлая',
+            dark: 'Темная',
+            cosmic: 'Космическая',
+            drinwater: 'Вода',
+            colors: 'Цвета'
+        }
     },
     en: {
         title: 'Armor Color Analyzer Hypixel',
@@ -319,7 +326,14 @@ const translations = {
         differenceHeader: 'Difference',
         tierHeader: 'Rank',
         invalidHex: 'Invalid HEX code format',
-        enteredColor: 'Entered color:'
+        enteredColor: 'Entered color:',
+        themes: {
+            light: 'Light',
+            dark: 'Dark',
+            cosmic: 'Cosmic',
+            drinwater: 'Drinwater',
+            colors: 'Colors'
+        }
     }
 };
 
@@ -481,6 +495,7 @@ function toggleLanguage() {
     tierHeader.textContent = translations[currentLanguage].tierHeader;
 
     checkColor(); // Перезапустить проверку цвета для обновления текста результата
+    updateThemeSelectOptions();
 }
 
 function clearHistory() {
@@ -499,5 +514,47 @@ function updateColorPreview(hex) {
     }
 }
 
-// Загрузить историю при загрузке страницы
-window.onload = loadHistory;
+function toggleTheme() {
+    const themeSelect = document.getElementById('themeSelect');
+    const selectedTheme = themeSelect.value;
+    const body = document.body;
+
+    // Удаляем все классы тем
+    body.classList.remove('light-theme', 'dark-theme', 'cosmic-theme', 'drinwater-theme', 'colors-theme');
+    
+    // Добавляем класс выбранной темы
+    body.classList.add(`${selectedTheme}-theme`);
+
+    // Сохраняем выбранную тему в localStorage
+    localStorage.setItem('selectedTheme', selectedTheme);
+}
+
+// Загрузка сохраненной темы при загрузке страницы
+window.onload = function() {
+    loadHistory();
+    
+    // Загрузка сохраненной темы
+    const savedTheme = localStorage.getItem('selectedTheme') || 'light';
+    document.getElementById('themeSelect').value = savedTheme;
+    document.body.classList.add(`${savedTheme}-theme`);
+    
+    // Обновление языковых настроек для селектора тем
+    updateThemeSelectOptions();
+}
+
+function updateThemeSelectOptions() {
+    const themeSelect = document.getElementById('themeSelect');
+    const options = themeSelect.options;
+    
+    options[0].text = translations[currentLanguage].themes.light;
+    options[1].text = translations[currentLanguage].themes.dark;
+    options[2].text = translations[currentLanguage].themes.cosmic;
+    options[3].text = translations[currentLanguage].themes.drinwater;
+    options[4].text = translations[currentLanguage].themes.colors;
+}
+
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        checkColor();
+    }
+}

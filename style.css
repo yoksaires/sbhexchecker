@@ -1,12 +1,263 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    transition: all 0.3s ease;
 }
 
 input[type="text"] {
     width: 300px;
     padding: 10px;
     margin-bottom: 10px;
+    font-size: 16px;
+    height: 42px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+select {
+    padding: 10px;
+    font-size: 16px;
+    height: 42px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Светлая тема (по умолчанию) */
+body.light-theme {
+    background-color: #ffffff;
+    color: #000000;
+}
+body.light-theme td.color-cell {
+    width: 50px;
+    height: 20px;
+    border: 1px solid #404040;
+}
+
+body.light-theme .color-preview {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    border-radius: 50%; /* Скругленный квадрат */
+    border: 1px solid #404040;
+    vertical-align: middle;
+}
+/* Темная тема */
+body.dark-theme {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark-theme button {
+    background-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-theme input[type="text"],
+body.dark-theme select {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #404040;
+}
+
+body.dark-theme table {
+    border-color: #404040;
+}
+
+body.dark-theme th,
+body.dark-theme td {
+    border: 1px solid #404040;
+}
+body.dark-theme td.color-cell {
+    width: 50px;
+    height: 20px;
+    border: 1px solid #404040;
+}
+
+body.dark-theme .color-preview {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    border-radius: 50%; /* Скругленный квадрат */
+    border: 1px solid #404040;
+    vertical-align: middle;
+}
+
+/* Вода тема */
+body.drinwater-theme {
+    background: url('https://media1.tenor.com/m/Wcy8Vzlv6EYAAAAd/drinwater.gif') center center fixed;
+    background-size: cover;
+    color: #ffffff;
+}
+
+body.drinwater-theme::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: -1;
+}
+
+body.drinwater-theme button {
+    background-color: rgba(0, 123, 255, 0.7);
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    backdrop-filter: blur(5px);
+}
+
+body.drinwater-theme input[type="text"],
+body.drinwater-theme select {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    backdrop-filter: blur(5px);
+}
+
+body.drinwater-theme table {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+body.drinwater-theme .history-tag {
+    background-color: rgba(0, 123, 255, 0.7);
+    backdrop-filter: blur(5px);
+}
+body.drinwater-theme td.color-cell {
+    width: 50px;
+    height: 20px;
+    border: 1px solid #404040;
+}
+
+body.drinwater-theme   .color-preview {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    border-radius: 50%; /* Скругленный квадрат */
+    border: 1px solid #404040;
+    vertical-align: middle;
+}
+
+/* Цвета тема */
+body.colors-theme {
+    background: url('https://media1.tenor.com/m/nCyMiWA0UGgAAAAd/color-shape.gif') center center fixed;
+    background-size: cover;
+    color: #ffffff;
+}
+
+body.colors-theme::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: -1;
+}
+
+body.colors-theme button {
+    background-color: rgba(0, 123, 255, 0.5);
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    backdrop-filter: blur(5px);
+}
+
+body.colors-theme input[type="text"],
+body.colors-theme select {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    backdrop-filter: blur(5px);
+}
+
+body.colors-theme table {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+body.colors-theme .history-tag {
+    background-color: rgba(0, 123, 255, 0.5);
+    backdrop-filter: blur(5px);
+}
+body.colors-theme td.color-cell {
+    width: 50px;
+    height: 20px;
+    border: 1px solid #404040;
+}
+
+body.colors-theme .color-preview {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    border-radius: 50%; /* Скругленный квадрат */
+    border: 1px solid #404040;
+    vertical-align: middle;
+}
+
+/* Космическая тема */
+body.cosmic-theme {
+    background: url('https://media1.tenor.com/m/BoArEsoXY5EAAAAd/color.gif') center center fixed;
+    background-size: cover;
+    color: #ffffff;
+}
+
+body.cosmic-theme::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+body.cosmic-theme button {
+    background-color: rgba(0, 123, 255, 0.7);
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    backdrop-filter: blur(5px);
+}
+
+body.cosmic-theme input[type="text"],
+body.cosmic-theme select {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    backdrop-filter: blur(5px);
+}
+
+body.cosmic-theme table {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+body.cosmic-theme .history-tag {
+    background-color: rgba(0, 123, 255, 0.7);
+    backdrop-filter: blur(5px);
+}
+body.cosmic-theme td.color-cell {
+    width: 50px;
+    height: 20px;
+    border: 1px solid #404040;
+}
+
+body.cosmic-theme .color-preview {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    border-radius: 50%; /* Скругленный квадрат */
+    border: 1px solid #404040;
+    vertical-align: middle;
 }
 
 button {
@@ -15,6 +266,26 @@ button {
     color: white;
     border: none;
     cursor: pointer;
+}
+
+/* Стили для кнопки Clear History */
+.header-buttons button {
+    height: 42px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+/* Стили для кнопки Find */
+button[onclick="checkColor()"] {
+    height: 42px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 button:hover {
@@ -58,6 +329,7 @@ button:hover {
 .history-tag:hover {
     background-color: #0056b3;
 }
+
 table {
     width: 100%;
     margin-top: 20px;

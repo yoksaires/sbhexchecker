@@ -16,10 +16,17 @@
                 <option value="ru">Русский</option>
                 <option value="en" selected>English</option>
             </select>
+            <select id="themeSelect" onchange="toggleTheme()">
+                <option value="light" selected>Светлая</option>
+                <option value="dark">Темная</option>
+                <option value="cosmic">Космическая</option>
+                <option value="drinwater">Вода</option>
+                <option value="colors">Цвета</option>
+            </select>
             <button onclick="clearHistory()">Clear History</button>
         </div>
     </div>
-    <input type="text" id="hexInput" placeholder="Enter HEX code">
+    <input type="text" id="hexInput" placeholder="Enter HEX code" onkeypress="handleKeyPress(event)">
     <!--<div class="color-preview" id="colorPreview"></div> -->
     <button onclick="checkColor()">Find</button>
     <div class="result" id="result"></div>
