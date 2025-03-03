@@ -558,3 +558,8 @@ function handleKeyPress(event) {
         checkColor();
     }
 }
+
+function openChangelog() {
+    // Можно открыть в новой вкладке
+    window.open('changelog.html', '_blank');
+}
