@@ -529,9 +529,28 @@ function toggleTheme() {
     localStorage.setItem('selectedTheme', selectedTheme);
 }
 
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        checkColor();
+    }
+}
+
+function getColorFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const color = urlParams.get('color');
+    if (color) {
+        const hexInput = document.getElementById('hexInput');
+        hexInput.value = color;
+        checkColor();
+    }
+}
+
 // Загрузка сохраненной темы при загрузке страницы
 window.onload = function() {
     loadHistory();
+    
+    // Проверяем URL параметры
+    getColorFromUrl();
     
     // Загрузка сохраненной темы
     const savedTheme = localStorage.getItem('selectedTheme') || 'light';
