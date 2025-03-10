@@ -430,7 +430,7 @@ function fillTable(colors) {
     const tableBody = document.getElementById('colorTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = ''; // Очистить таблицу
 
-    colors.forEach(item => {
+    colors.forEach((item, index) => {
         const row = tableBody.insertRow();
         const cellName = row.insertCell(0);
         const cellHex = row.insertCell(1);
@@ -444,6 +444,13 @@ function fillTable(colors) {
         cellColor.style.backgroundColor = item.color;
         cellDistance.textContent = item.distance.toFixed(2);
         cellRank.textContent = getRank(item.distance); // Получить ранг
+
+        //условный класс к ячейкам
+        cellName.className = `cell-name-${index}`;
+        cellHex.className = `cell-hex-${index}`;
+        cellColor.className = `cell-color-${index}`;
+        cellDistance.className = `cell-distance-${index}`;
+        cellRank.className = `cell-rank-${index}`;
     });
 }
 
@@ -581,4 +588,15 @@ function handleKeyPress(event) {
 function openChangelog() {
     // Можно открыть в новой вкладке
     window.open('changelog.html', '_blank');
+}
+
+function shareUrl() {
+    const hex = document.getElementById('hexInput').value.trim();
+    const baseUrl = 'https://yoksaires.github.io/sbhexchecker/sbpalette.html';
+    const urlWithParam = `${baseUrl}?color=${encodeURIComponent(hex)}`;
+    navigator.clipboard.writeText(urlWithParam).then(() => {
+        alert('Ссылка скопирована в буфер обмена!');
+    }, (err) => {
+        console.error('Ошибка при копировании: ', err);
+    });
 }
